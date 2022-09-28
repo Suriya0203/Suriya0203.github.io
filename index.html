@@ -1,0 +1,32 @@
+Hello World
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://hv-camera-web-sg.s3.ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.1.6/src/sdk.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <button type="“button”" onclick="starOnboarding()">
+        Start Onboarding
+      </button>
+    </div>
+  </body>
+  <script>
+    function starOnboarding() {
+      const accessToken =
+        "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY0MjcxMjQyLCJleHAiOjE2NjQyNzQyNDIsImp0aSI6IjNjNGE0MjFhLTAwOGUtNGQ5Ny04MmEyLWI0NDQwNDRlMTEwOCJ9.D_qKDDj3pPnV2jlquRBRet9m2Uxdip1WJvFidIhSoc2yEzrQDf5OElF9R4qeOFWTYmHzhifwg_6_vIZ5Qxp-iCYiDTle2WAiEbH5R7ldQFTvMTH7OP4jmTadUTIYoe0u76MOiUFspenKs90THNqQ56JawAlWYxr1YONCiSVMMME";
+      const hyperKycConfig = new HyperKycConfig(
+        accessToken,
+        "crypto",
+        "suriya-testing-123456-1235678"
+      );
+      hyperKycConfig.setInputs({
+        Name: "MANOJKUMAR E",
+      });
+      const handler = (HyperKycResult) => {
+        console.log(HyperKycResult);
+      };
+      HyperKYCModule.launch(hyperKycConfig, handler);
+    }
+  </script>
+</html>
