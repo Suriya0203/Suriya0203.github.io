@@ -1,32 +1,101 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <script src="https://hv-camera-web-sg.s3.ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.1.6/src/sdk.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.4/src/sdk.min.js"></script>
+  <style>
+    button {
+      border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+button:hover:enabled {
+  background-color: #4CAF50;
+  color: white;
+}
+  </style>
   </head>
   <body>
-    <div>
-      <button type="“button”" onclick="starOnboarding()">
-        Start Onboarding
-      </button>
-    </div>
+    <br>
+    <center><h2>Hyperverge WebSDK</h2></center><br>
+    <center>
+    <div class="container">
+      <div class="form-group">
+        <button type="button" onclick="runOCR();" class="btn btn-primary">OCR</button>
+        <!-- <button type="button" onclick="runOCR();" id="ocr" class="btn btn-primary">Run OCR</button> -->
+        
+        <!-- <button type="button" onclick="FaceMatch();" id="face" class="btn btn-primary">Face Match</button> -->
+      </div>
+      <div id="div1"></div>
+      <p style="color: red;" id="hint"></p>
+    </div></center>
+    <script>
+      // const button=document.getElementById('ocr')
+      // button.disabled=true;
+      // const button2=document.getElementById('face')
+      // button2.disabled=true
+      var jwtToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY0NDUwNzgxLCJleHAiOjE2NjQ0NTY3ODEsImp0aSI6IjRlNjQyNTJhLWVjZWUtNDkyNi05OGRkLWZiY2NlMGM5OGUwZSJ9.J3S08d4NKrpTuTUJIMKALKdznZK9y-gVy0OQv8hAP1L2OgGEaloGpQIrCeTpt9agEv7DfhUcSwItqEO9GoEn1XLsPlibT7wyKm39_n9Ti7tGHJ_8qH2R7f7czSw1Q5e9STeJYoNvEdnhd0WG8AgjblGrY3Uo7xgVNfAiBedy0Ok'
+      HyperSnapSDK.init(jwtToken, HyperSnapParams.Region.India);
+      HyperSnapSDK.startUserSession();
+      var faceImage = '';
+      var docImage = '';
+
+////
+
+      function runOCR() {
+        hvDocConfig = new HVDocConfig();
+        hvDocConfig.setShouldShowDocReviewScreen(true);
+        hvDocConfig.setShouldShowInstructionPage(true);
+        hvDocConfig.setOCRDetails(
+          'https://ind-docs.hyperverge.co/v2.0/readKYC',
+          hvDocConfig.DocumentSide.FRONT,
+          { },
+          { },
+        );
+        callback = (HVError, HVResponse) => {
+        if(HVError) {
+            var errorCode = HVError.getErrorCode();
+            var errorMessage = HVError.getErrorMessage();
+            var para = document.createElement('p');
+          var node = document.createTextNode(JSON.stringify(HVError));
+          para.appendChild(node);
+          var element = document.getElementById('div1');
+          element.appendChild(para);
+          document.getElementById('hint').innerHTML="Try to capture it again"
+          // alert("Not supported KYC document. Try to capture it again")
+        } 
+        else if(HVResponse) {
+            var apiResults = HVResponse.getApiResult();
+            var apiHeaders = HVResponse.getApiHeaders();
+            var imageBase64 = HVResponse.getImageBase64();
+            docImage   = imageBase64
+            var para = document.createElement('p');
+          var node = document.createTextNode(JSON.stringify(HVResponse));
+          para.appendChild(node);
+          console.log(node)
+          var element = document.getElementById('div1');
+          element.appendChild(para);
+          alert("ID verified successfully")
+        }
+    };
+
+    HVDocsModule.start(hvDocConfig, callback); 
+
+       
+    // console.log(faceImage,"suriya")
+      }
+     
+     
+    </script>
   </body>
-  <script>
-    function starOnboarding() {
-      const accessToken =
-        "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY0MjcxMjQyLCJleHAiOjE2NjQyNzQyNDIsImp0aSI6IjNjNGE0MjFhLTAwOGUtNGQ5Ny04MmEyLWI0NDQwNDRlMTEwOCJ9.D_qKDDj3pPnV2jlquRBRet9m2Uxdip1WJvFidIhSoc2yEzrQDf5OElF9R4qeOFWTYmHzhifwg_6_vIZ5Qxp-iCYiDTle2WAiEbH5R7ldQFTvMTH7OP4jmTadUTIYoe0u76MOiUFspenKs90THNqQ56JawAlWYxr1YONCiSVMMME";
-      const hyperKycConfig = new HyperKycConfig(
-        accessToken,
-        "crypto",
-        "suriya-testing-123456-1235678"
-      );
-      hyperKycConfig.setInputs({
-        Name: "MANOJKUMAR E",
-      });
-      const handler = (HyperKycResult) => {
-        console.log(HyperKycResult);
-      };
-      HyperKYCModule.launch(hyperKycConfig, handler);
-    }
-  </script>
 </html>
