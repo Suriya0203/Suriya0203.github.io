@@ -23,6 +23,21 @@ button:hover:enabled {
   background-color: #4CAF50;
   color: white;
 }
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td{
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
   </style>
   </head>
   <body>
@@ -39,12 +54,37 @@ button:hover:enabled {
       <div id="div1"></div>
       <p style="color: red;" id="hint"></p>
     </div></center>
+    <div>
+      <table>
+        <tr>
+          <td >Blur</td>
+          <td id="blur"></td>
+         
+        </tr>
+        <tr>
+          <td>Glare</td>
+          <td id="glare"></td>
+         
+        </tr>
+        <tr>
+          <td>Partial Id</td>
+          <td id="partialId"></td>
+         
+        </tr>
+        <tr>
+          <td>LiveDocument</td>
+          <td id="liveDoc"></td>
+        
+        </tr>
+
+      </table>
+    </div>
     <script>
       // const button=document.getElementById('ocr')
       // button.disabled=true;
       // const button2=document.getElementById('face')
       // button2.disabled=true
-      var jwtToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY0NDUwNzgxLCJleHAiOjE2NjQ0NTY3ODEsImp0aSI6IjRlNjQyNTJhLWVjZWUtNDkyNi05OGRkLWZiY2NlMGM5OGUwZSJ9.J3S08d4NKrpTuTUJIMKALKdznZK9y-gVy0OQv8hAP1L2OgGEaloGpQIrCeTpt9agEv7DfhUcSwItqEO9GoEn1XLsPlibT7wyKm39_n9Ti7tGHJ_8qH2R7f7czSw1Q5e9STeJYoNvEdnhd0WG8AgjblGrY3Uo7xgVNfAiBedy0Ok'
+      var jwtToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY0NTM4NDY4LCJleHAiOjE2NjQ2MjQ4NjgsImp0aSI6IjE0ODYwMWU4LWMzYTMtNDcwNS1iNDk0LTZhNWVhNTg2YzBjNyJ9.b759eo3HnfPUrksLkbbkG8XaVCPPopvT9X5Z4rPb19l45H-ut8fEajw7S1rEbo-Lc-qXkQAR7aKt85Vy-hGHub4QYA1HPC48DW2RItkHenYXZz_WpH_J6xBPB2hQlEzV7w3FsWpj_BXO8rdsdUQwpI-1tPTufz-oPrbqkDehORg'
       HyperSnapSDK.init(jwtToken, HyperSnapParams.Region.India);
       HyperSnapSDK.startUserSession();
       var faceImage = '';
@@ -57,9 +97,14 @@ button:hover:enabled {
         hvDocConfig.setShouldShowDocReviewScreen(true);
         hvDocConfig.setShouldShowInstructionPage(true);
         hvDocConfig.setOCRDetails(
-          'https://ind-docs.hyperverge.co/v2.0/readKYC',
+          'https://ind-docs.hyperverge.co/v2.0/readDL',
           hvDocConfig.DocumentSide.FRONT,
-          { },
+          { checkBlur:"yes",
+          checkGlare:"yes",
+          checkPartialID:"yes",
+          checkLiveDocument:"yes"
+          
+        },
           { },
         );
         callback = (HVError, HVResponse) => {
@@ -85,6 +130,11 @@ button:hover:enabled {
           console.log(node)
           var element = document.getElementById('div1');
           element.appendChild(para);
+          console.log(apiResults.result[0].details.qualityChecks,1234)
+          document.getElementById('glare').innerHTML=apiResults.result[0].details.qualityChecks.glare.value
+          document.getElementById('blur').innerHTML=apiResults.result[0].details.qualityChecks.blur.value
+          document.getElementById('partialId').innerHTML=apiResults.result[0].details.qualityChecks.partialID.value
+          document.getElementById('liveDoc').innerHTML=apiResults.result[0].details.qualityChecks.capturedFromScreen.value
           alert("ID verified successfully")
         }
     };
