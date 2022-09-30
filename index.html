@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.4/src/sdk.min.js"></script>
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.2/src/sdk.min.js"></script>
   <style>
     button {
       border: none;
@@ -46,14 +46,15 @@ tr:nth-child(even) {
     <center>
     <div class="container">
       <div class="form-group">
-        <button type="button" onclick="runOCR();" class="btn btn-primary">OCR</button>
+        
+        <button type="button" onclick="runOCR();" class="btn btn-primary">OCR</button><br><br><br>
         <!-- <button type="button" onclick="runOCR();" id="ocr" class="btn btn-primary">Run OCR</button> -->
         
         <!-- <button type="button" onclick="FaceMatch();" id="face" class="btn btn-primary">Face Match</button> -->
       </div>
-      <div id="div1"></div>
+      <div id="div1"></div><br/>
       <p style="color: red;" id="hint"></p>
-    </div></center>
+    </div></center><br/>
     <div>
       <table>
         <tr>
@@ -84,15 +85,17 @@ tr:nth-child(even) {
       // button.disabled=true;
       // const button2=document.getElementById('face')
       // button2.disabled=true
-      var jwtToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY0NTM4NDY4LCJleHAiOjE2NjQ2MjQ4NjgsImp0aSI6IjE0ODYwMWU4LWMzYTMtNDcwNS1iNDk0LTZhNWVhNTg2YzBjNyJ9.b759eo3HnfPUrksLkbbkG8XaVCPPopvT9X5Z4rPb19l45H-ut8fEajw7S1rEbo-Lc-qXkQAR7aKt85Vy-hGHub4QYA1HPC48DW2RItkHenYXZz_WpH_J6xBPB2hQlEzV7w3FsWpj_BXO8rdsdUQwpI-1tPTufz-oPrbqkDehORg'
+      var jwtToken = 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6InFhbjdjcSIsImhhc2giOiJmNmExYTg1ZmI4ZmZlY2I0YzU4Y2NkZmNmNjI5ZTI4N2EwMTJlMDhmNzkzZTNiMTg3YWYxMjRjMWMzZDFjMzAxIiwiaWF0IjoxNjY0NTUwMDE0LCJleHAiOjE2NjQ2MzY0MTQsImp0aSI6IjQ1MGY5NmVmLTNkYTgtNDcwMC04NzdlLTI1ZTQ0YmRhNGNjOSJ9.kCUP2DZ8l-XS08tCnVrQ6yuqJ4kxaKgExfO9QE8bwHtIkenO9_nc6e7lXpX8BTeTe4wIx2leuZLMsHIYlQiufOEysWSSSPp_ajK4IwqdnIfHbUqWGStISgLyyQS7OwYtGxxkoTuHNmRycfIaBM_uhlIKseLKB3VYC_9mDJdxohc'
       HyperSnapSDK.init(jwtToken, HyperSnapParams.Region.India);
-      HyperSnapSDK.startUserSession();
+
       var faceImage = '';
       var docImage = '';
 
 ////
 
       function runOCR() {
+        var Transaction_Id=prompt("Please enter your unique ID");
+        HyperSnapSDK.startUserSession(Transaction_Id);
         hvDocConfig = new HVDocConfig();
         hvDocConfig.setShouldShowDocReviewScreen(true);
         hvDocConfig.setShouldShowInstructionPage(true);
@@ -107,39 +110,44 @@ tr:nth-child(even) {
         },
           { },
         );
-        callback = (HVError, HVResponse) => {
-        if(HVError) {
-            var errorCode = HVError.getErrorCode();
-            var errorMessage = HVError.getErrorMessage();
-            var para = document.createElement('p');
-          var node = document.createTextNode(JSON.stringify(HVError));
-          para.appendChild(node);
-          var element = document.getElementById('div1');
-          element.appendChild(para);
-          document.getElementById('hint').innerHTML="Try to capture it again"
-          // alert("Not supported KYC document. Try to capture it again")
-        } 
-        else if(HVResponse) {
-            var apiResults = HVResponse.getApiResult();
-            var apiHeaders = HVResponse.getApiHeaders();
-            var imageBase64 = HVResponse.getImageBase64();
-            docImage   = imageBase64
-            var para = document.createElement('p');
-          var node = document.createTextNode(JSON.stringify(HVResponse));
-          para.appendChild(node);
-          console.log(node)
-          var element = document.getElementById('div1');
-          element.appendChild(para);
-          console.log(apiResults.result[0].details.qualityChecks,1234)
-          document.getElementById('glare').innerHTML=apiResults.result[0].details.qualityChecks.glare.value
-          document.getElementById('blur').innerHTML=apiResults.result[0].details.qualityChecks.blur.value
-          document.getElementById('partialId').innerHTML=apiResults.result[0].details.qualityChecks.partialID.value
-          document.getElementById('liveDoc').innerHTML=apiResults.result[0].details.qualityChecks.capturedFromScreen.value
-          alert("ID verified successfully")
+        callback = (data, hvKycLink) =>{
+        if(hvKycLink) {
+            var link = hvKycLink.getKycLink();
         }
-    };
-
-    HVDocsModule.start(hvDocConfig, callback); 
+        else if (data) {
+          if(data.results){
+                data.results.forEach((d) => {
+                    var { hvError, hvResponse } = d;
+                    if (hvError) {
+                      hvError = new HVError(hvError);
+                      var errorCode = hvError.getErrorCode();
+                      var errorMessage = hvError.getErrorMessage();
+                      document.getElementById('div1').innerHTML=errorMessage
+                      document.getElementById('hint').innerHTML="Try to capture it again"
+                    } else if (hvResponse) {
+                      hvResponse = new HVResponse(hvResponse);
+                      var apiResults = hvResponse.getApiResult();
+                      var apiHeaders = hvResponse.getApiHeaders();
+                      var imageBase64 = hvResponse.getImageBase64();
+                      document.getElementById('div1').innerHTML=JSON.stringify(hvResponse);
+                      console.log(apiResults.result[0].details.qualityChecks,1234)
+                      document.getElementById('glare').innerHTML=apiResults.result[0].details.qualityChecks.glare.value
+                      document.getElementById('blur').innerHTML=apiResults.result[0].details.qualityChecks.blur.value
+                      document.getElementById('partialId').innerHTML=apiResults.result[0].details.qualityChecks.partialID.value
+                      document.getElementById('liveDoc').innerHTML=apiResults.result[0].details.qualityChecks.capturedFromScreen.value
+                    }
+                 });
+            }
+            else {
+                var errorCode = data.getErrorCode();
+                var errorMessage = data.getErrorMessage();
+                document.getElementById('div1').innerHTML=errorMessage
+                document.getElementById('hint').innerHTML="Try to capture it again"
+            }
+        }
+ }
+    // HVDocsModule.start(hvDocConfig, callback); 
+    HVQRModule.start(callback, [hvDocConfig], false); 
 
        
     // console.log(faceImage,"suriya")
