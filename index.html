@@ -12,7 +12,7 @@
     <button onclick="call();"> click</button>
     <script>
         function call(){
-          let transactionId=prompt("enter unique id)
+          var transactionId=prompt("enter unique id)
             const accessToken="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY2OTU1ODMyLCJleHAiOjE2NjY5NjQ0MzIsImp0aSI6ImZjN2IwMDc0LTgwYzktNGYxNi1hNmZlLTMxNGMyMGI5NTEwZSJ9.qReeJH5HDNhTH_rSbPgX-CXPKy3_Inv1FDAU26YHLpD-6T7SExDmWn5x_K-oxvQ9JEQXVT8Sp4DgsE5rVAoDzIVTY_iY6jQDPAhpzxVOTh7SX7UP5ATKmHHatGZdQ6biR7RpiPYxcuoitj7RvuOMIPypEbqo4TUqPKYYbmhSqwE"
           const hyperKycConfig = new window.HyperKycConfig(accessToken, "digi_fm", transactionId);
           const handler = (HyperKycResult) => {
