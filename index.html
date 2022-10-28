@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="https://hv-camera-web-sg.s3.ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.4/src/sdk.min.js"></script>
-  </head>
-  <body>
-    <div>
-      <button type="“button”" onclick="starOnboarding()">
-        Start Onboarding
-      </button>
-    </div>
-  </body>
-  <script>
-    function starOnboarding() {
-      let transaction_id=prompt("Enter unique id")
-      const accessToken =
-        "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY1NjQyMDU3LCJleHAiOjE2NjU3Mjg0NTcsImp0aSI6IjExM2RlMjYyLWJmMTUtNDU5Ny1hMjQxLWY0MmY1NWM2OGM4ZSJ9.Tpcy-HoSPKHJFKj5z4bdlkCek8Rc6WlDnqmrtA9whCpnsmbntv2hHjy02gHesJp-BKqHeL8LyfN3gP1kZt6yyCxExpwKk08t9iNfB2liYkC5GdfBa-p2Lf_Z9DCDP8I7MYQG_jiVZOK8eaFWat-N6d7lj7zU3CD4HTxw0uft4Gg";
-      const hyperKycConfig = new HyperKycConfig(
-        accessToken,
-        "Taskmo",
-        transaction_id
-      );
-      // hyperKycConfig.setInputs({
-      //   Name: "MANOJKUMAR E",
-      //   ifsc:"CIUB0000032",
-      //   accountNumber:"500101011643916"
-      // });
-      const handler = (HyperKycResult) => {
-        console.log(HyperKycResult);
-      };
-      HyperKYCModule.launch(hyperKycConfig, handler);
-    }
-  </script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.4/src/sdk.min.js"></script>
+    <title>Document</title>
+    
+</head>
+<body>
+    <button onclick="call();"> click</button>
+    <script>
+        function call(){
+          let transactionId=prompt("enter unique id)
+            const accessToken="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY2OTU1ODMyLCJleHAiOjE2NjY5NjQ0MzIsImp0aSI6ImZjN2IwMDc0LTgwYzktNGYxNi1hNmZlLTMxNGMyMGI5NTEwZSJ9.qReeJH5HDNhTH_rSbPgX-CXPKy3_Inv1FDAU26YHLpD-6T7SExDmWn5x_K-oxvQ9JEQXVT8Sp4DgsE5rVAoDzIVTY_iY6jQDPAhpzxVOTh7SX7UP5ATKmHHatGZdQ6biR7RpiPYxcuoitj7RvuOMIPypEbqo4TUqPKYYbmhSqwE"
+          const hyperKycConfig = new window.HyperKycConfig(accessToken, "digi_fm", transactionId);
+          const handler = (HyperKycResult) => {
+    switch(HyperKycResult.status) {
+      case "user_cancelled":
+          // user cancelled
+      break;
+      case "error":
+        // failure
+      break;
+      case "auto_approved":
+      case "auto_declined":
+      case "needs_review":
+        // workflow success
+      break;
+		}
+}
+    window.HyperKYCModule.launch(hyperKycConfig, handler);}
+    </script>
+  
+    
+</body>
 </html>
