@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.4/src/sdk.min.js"></script>
+    <script src="https://hv-camera-web-sg.s3-ap-southeast-1.amazonaws.com/hyperverge-web-sdk@5.2.5/src/sdk.min.js"></script>
     <title>Document</title>
     
 </head>
@@ -12,8 +12,8 @@
     <button onclick="call();"> click</button>
     <script>
         function call(){
-            const accessToken="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY2OTU1ODMyLCJleHAiOjE2NjY5NjQ0MzIsImp0aSI6ImZjN2IwMDc0LTgwYzktNGYxNi1hNmZlLTMxNGMyMGI5NTEwZSJ9.qReeJH5HDNhTH_rSbPgX-CXPKy3_Inv1FDAU26YHLpD-6T7SExDmWn5x_K-oxvQ9JEQXVT8Sp4DgsE5rVAoDzIVTY_iY6jQDPAhpzxVOTh7SX7UP5ATKmHHatGZdQ6biR7RpiPYxcuoitj7RvuOMIPypEbqo4TUqPKYYbmhSqwE"
-          const hyperKycConfig = new window.HyperKycConfig(accessToken, "digi_fm", "digifmesing");
+            const accessToken="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6IjBlYzEzYyIsImhhc2giOiJiMzRkNTdiNTU0ZDdkNTZmNDlmODNjMDgzZTI3YzhhZGVmOWI0NjczMjYyMzQ2MzNkMmJlMGQ2NTAzYTY5NGVmIiwiaWF0IjoxNjY3MjA0ODk0LCJleHAiOjE2NjcyMTM0OTQsImp0aSI6IjcwNDE4ZmVlLTBmNWQtNGM5MC1iMjFkLTdlZjdmNDlkZDlhYyJ9.DRzzrCssIJ2t7bNp6-eNeLISan-4OBDZetB5gB8eARynZnTRkhCpVgA-Qek70Vwzh14ycMYzahyNmB2palPqdxcn5u9_FmKc1_oos0QlMFK2x5jjBcGwqLgpRt-_TAUmn2nfwbvFbNUvEUCVd5ff0w6O2UqGyHER9PssdphJtGc"
+          const hyperKycConfig = new window.HyperKycConfig(accessToken, "digi_fm", "FORCHECK");
           const handler = (HyperKycResult) => {
     switch(HyperKycResult.status) {
       case "user_cancelled":
